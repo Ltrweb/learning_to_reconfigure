@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning to Reconfigure</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            color: #1a237e;
+            line-height: 1.3;
+            letter-spacing: 0.5px;
+        }
+
+        .section {
+            background-color: #ffffff;
+            padding: 30px 45px;
+            margin: 25px auto;
+            max-width: 1100px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .section h2 {
+            font-size: 2em;
+            border-bottom: 2px solid #3f51b5;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #1a237e;
+            text-align: left;
+        }
+
+        .section h3 {
+            font-size: 1.4em;
+            color: #283593;
+            margin: 30px 0 15px 0;
+            border-left: 4px solid #3f51b5;
+            padding-left: 10px;
+        }
+
+        .section p {
+            text-align: justify;       
+            text-justify: inter-word;  
+            line-height: 1.7;            
+            word-wrap: break-word;      
+            hyphens: auto;             
+            margin: 0;                  
+        }
+
+        #abstract p {
+            text-justify: inter-character; 
+            font-size: 1em;          
+            letter-spacing: 0.2px; 
+        }
+
+        .result-card {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #fafafa;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .video-table-wrapper {
+            overflow-x: auto;
+            margin: 15px 0 25px;
+            padding: 5px 0;
+        }
+
+        .video-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0px 0px;
+            margin: 20px 0;
+            table-layout: fixed; 
+        }
+
+        .video-table th {
+            padding: 8px 5px;
+            text-align: center;
+            background-color: #f0f4ff;
+            color: #1a237e;
+            font-weight: bold;
+            font-size: 0.85em;
+            border-radius: 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border: none;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .video-table th:first-child,
+        .video-table td:first-child {
+            background-color: #f8f9fa;
+            position: sticky;
+            left: 0;
+            z-index: 15;
+            width: 90px; 
+            white-space: normal;
+            vertical-align: middle;
+            padding: 5px 8px;
+            border-right: 1px solid #eee;
+        }
+        
+
+        .video-table thead th:first-child {
+            background-color: #f8f9fa;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-table thead th:first-child::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom left,
+                transparent 48%,
+                #ccc 48%,
+                #ccc 52%,
+                transparent 52%
+            );
+            pointer-events: none;
+        }
+
+        .video-table thead th:first-child::after {
+            content: "Tasks";
+            position: absolute;
+            bottom: 3px;
+            left: 10px;
+            font-size: 0.7em;
+            color: #666;
+            font-weight: normal;
+        }
+
+        .video-table thead th:first-child span.slash-text {
+            position: absolute;
+            top: 1px;
+            right: 3px;
+            font-size: 0.7em;
+            color: #666;
+            font-weight: normal;
+        }
+
+        .row-title {
+            display: block;
+            font-weight: bold;
+            font-size: 0.85em;
+            color: #333;
+            margin-bottom: 2px;
+        }
+        
+        .row-subtitle {
+            display: block;
+            font-size: 0.7em;
+            color: #666;
+            font-weight: normal;
+            line-height: 1.2;
+        }
+
+        .video-table td {
+            padding: 0;
+            vertical-align: middle;
+            border: none;
+        }
+
+        .table-video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            width: 100%;
+            border-radius: 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            background-color: #000;
+        }
+
+        .table-video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 0;
+            object-fit: cover;
+        }
+
+        .no-video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            width: 100%;
+            border-radius: 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            background-color: #f8f8f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .no-video-text {
+            font-size: 0.8em;
+            color: #888888; 
+            padding: 0;
+            margin: 0;
+            line-height: 1.4;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .video-table th:first-child {
+                width: 80px;
+                font-size: 0.7em;
+            }
+
+            #abstract p {
+                text-align: left;
+                text-justify: auto;
+                hyphens: manual;
+            }
+
+            .video-table thead th:first-child::after,
+            .video-table thead th:first-child span.slash-text {
+                display: none;
+            }
+            
+            .no-video-text {
+                font-size: 0.7em;
+                color: #999999;
+                font-style: italic;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Learning to Reconfigure:<br>Co-designing Reconfigurable robots for Heterogeneous Locomotion</h1>
+    </header>
+
+    <div class="container">
+        
+        <div id="results" class="section">
+            <h2>Video Demonstrations</h2>
+
+            <div class="video-table-wrapper">
+                <table class="video-table">
+                    <thead>
+                        <tr>
+                            <th><span class="slash-text">Algorithms</span></th> 
+                            <th>Ours</th>
+                            <th>Domain-Expert</th>
+                            <th>PPO</th>
+                            <th>TD-MPC2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>
+                                <span class="row-title">Fly-Walk</span>
+                                <span class="row-subtitle">(Mount)</span>
+                            </th> 
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/1Fly-walk-mount/ours.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/1Fly-walk-mount/manually.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/1Fly-walk-mount/ppo.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/1Fly-walk-mount/TDMPC2.mp4"></video></div></td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <span class="row-title">Fly-Walk</span>
+                                <span class="row-subtitle">(Pit)</span>
+                            </th>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/2fly-walk-pit/ours.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/2fly-walk-pit/manually.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/2fly-walk-pit/ppo.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/2fly-walk-pit/TDMPC2.mp4"></video></div></td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <span class="row-title">Car-Leg</span>
+                                <span class="row-subtitle">(Stairs)</span>
+                            </th>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/3car-leg-stairs/ours.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/3car-leg-stairs/manually.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/3car-leg-stairs/ppo.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/3car-leg-stairs/TDMPC2.mp4"></video></div></td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <span class="row-title">Car-Leg</span>
+                                <span class="row-subtitle">(Narrow)</span>
+                            </th>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/4car-leg-narrow/ours.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/4car-leg-narrow/manually.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/4car-leg-narrow/ppo.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/4car-leg-narrow/TDMPC2.mp4"></video></div></td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <span class="row-title">Wheel-Leg</span>
+                            </th>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/5WheelLeg/ours.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/5WheelLeg/manually.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/5WheelLeg/ppo.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/5WheelLeg/TDMPC2.mp4"></video></div></td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <span class="row-title">Wheel-Fly</span>
+                                <span class="row-subtitle">(Mount)</span>
+                            </th>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/6wheel-propeller-mount/ours.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/6wheel-propeller-mount/manually.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/6wheel-propeller-mount/ppo.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/6wheel-propeller-mount/TDMPC2.mp4"></video></div></td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <span class="row-title">Wheel-Fly</span>
+                                <span class="row-subtitle">(Swim)</span>
+                            </th>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/7wheel-propeller/ours.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/7wheel-propeller/manually.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/7wheel-propeller/ppo.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/7wheel-propeller/tdmpc2.mp4"></video></div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="video-table-wrapper">
+                <table class="video-table">
+                    <thead>
+                        <tr>
+                            <th><span class="slash-text">Algorithms</span></th> 
+                            <th>Ours</th>
+                            <th>BodyGen</th>
+                            <th>GLSO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>
+                                <span class="row-title">Fly-Walk</span>
+                                <span class="row-subtitle">(Mount)</span>
+                            </th> 
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/1Fly-walk-mount/ours.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/1Fly-walk-mount/bodygen.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/1Fly-walk-mount/GLSO.mp4"></video></div></td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <span class="row-title">Fly-Walk</span>
+                                <span class="row-subtitle">(Pit)</span>
+                            </th>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/2fly-walk-pit/ours.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/2fly-walk-pit/bodygen.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/2fly-walk-pit/GLSO.mp4"></video></div></td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <span class="row-title">Car-Leg</span>
+                                <span class="row-subtitle">(Stairs)</span>
+                            </th>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/3car-leg-stairs/ours.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/3car-leg-stairs/bodygen.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/3car-leg-stairs/GLSO.mp4"></video></div></td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <span class="row-title">Car-Leg</span>
+                                <span class="row-subtitle">(Narrow)</span>
+                            </th>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/4car-leg-narrow/ours.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/4car-leg-narrow/bodygen.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/4car-leg-narrow/GLSO.mp4"></video></div></td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <span class="row-title">Wheel-Leg</span>
+                            </th>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/5WheelLeg/ours.mp4"></video></div></td>
+                            <td><div class="no-video-container"><span class="no-video-text">FAIL</span></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/5WheelLeg/GLSO.mp4"></video></div></td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <span class="row-title">Wheel-Fly</span>
+                                <span class="row-subtitle">(Mount)</span>
+                            </th>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/6wheel-propeller-mount/ours.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/6wheel-propeller-mount/bodygen.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/6wheel-propeller-mount/GLSO.mp4"></video></div></td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <span class="row-title">Wheel-Fly</span>
+                                <span class="row-subtitle">(Swim)</span>
+                            </th>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/7wheel-propeller/ours.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/7wheel-propeller/bodygen1.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/7wheel-propeller/glso1.mp4"></video></div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="video-table-wrapper">
+                <table class="video-table">
+                    <thead>
+                        <tr>
+                            <th><span class="slash-text">Algorithms</span></th> 
+                            <th>Full Pipeline</th>
+                            <th>W/O ϵ-Greedy</th>
+                            <th>W/O Stage Opt</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>
+                                <span class="row-title">Fly-Walk</span>
+                                <span class="row-subtitle">(Mount)</span>
+                            </th> 
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/1Fly-walk-mount/ours.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/1Fly-walk-mount/random.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/1Fly-walk-mount/qpos.mp4"></video></div></td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <span class="row-title">Fly-Walk</span>
+                                <span class="row-subtitle">(Pit)</span>
+                            </th>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/2fly-walk-pit/ours.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/2fly-walk-pit/random.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/2fly-walk-pit/qpos.mp4"></video></div></td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <span class="row-title">Car-Leg</span>
+                                <span class="row-subtitle">(Stairs)</span>
+                            </th>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/3car-leg-stairs/ours.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/3car-leg-stairs/random.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/3car-leg-stairs/qpos.mp4"></video></div></td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <span class="row-title">Car-Leg</span>
+                                <span class="row-subtitle">(Narrow)</span>
+                            </th>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/4car-leg-narrow/ours.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/4car-leg-narrow/random.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/4car-leg-narrow/qpos.mp4"></video></div></td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <span class="row-title">Wheel-Leg</span>
+                            </th>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/5WheelLeg/ours.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/5WheelLeg/random.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/5WheelLeg/qpos.mp4"></video></div></td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <span class="row-title">Wheel-Fly</span>
+                                <span class="row-subtitle">(Mount)</span>
+                            </th>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/6wheel-propeller-mount/ours.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/6wheel-propeller-mount/random.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/6wheel-propeller-mount/qpos.mp4"></video></div></td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <span class="row-title">Wheel-Fly</span>
+                                <span class="row-subtitle">(Swim)</span>
+                            </th>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/7wheel-propeller/ours.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/7wheel-propeller/random.mp4"></video></div></td>
+                            <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/7wheel-propeller/qpos.mp4"></video></div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // 获取所有带有 .lazy-video 类名的视频元素
+            var lazyVideos = [].slice.call(document.querySelectorAll("video.lazy-video"));
+
+            if ("IntersectionObserver" in window) {
+                var lazyVideoObserver = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(function(entry) {
+                        // 只要视频元素进入了扩展视口范围
+                        if (entry.isIntersecting) {
+                            var video = entry.target;
+                            
+                            // 确保静音以允许自动播放
+                            video.muted = true;
+                            
+                            // 触发播放
+                            var promise = video.play();
+                            if (promise !== undefined) {
+                                promise.catch(function(error) {
+                                    console.log("Autoplay interrupted or blocked.");
+                                });
+                            }
+                        } else {
+                            // 离开视口时暂停，节省性能
+                            entry.target.pause();
+                        }
+                    });
+                }, {
+                    // 向上和向下各扩展 500 像素的检测范围，防止“触顶才播”
+                    rootMargin: "500px 0px 500px 0px",
+                    threshold: 0 
+                });
+
+                lazyVideos.forEach(function(lazyVideo) {
+                    lazyVideoObserver.observe(lazyVideo);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
