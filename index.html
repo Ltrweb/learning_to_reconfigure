@@ -36,6 +36,44 @@
             letter-spacing: 0.5px;
         }
 
+        /* --- 作者与机构样式 --- */
+        .authors {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .author {
+            font-size: 1.15em;
+            margin: 0 8px;
+            color: #2c3e50;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .author sup {
+            color: #555;
+            margin-left: 2px;
+        }
+
+        .affiliation-container {
+            margin-top: 15px;
+        }
+
+        .affiliation {
+            font-size: 0.95em;
+            color: #555;
+            margin: 4px 0;
+            font-style: italic;
+        }
+        
+        .correspondence {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        /* -------------------------- */
+
         .section {
             background-color: #ffffff;
             padding: 30px 45px;
@@ -68,29 +106,23 @@
             line-height: 1.7;            
             word-wrap: break-word;      
             hyphens: auto;             
-            margin: 0;                  
+            margin: 0 0 15px 0;                  
         }
 
         #abstract p {
             text-justify: inter-character; 
-            font-size: 1em;          
+            font-size: 1.05em;          
             letter-spacing: 0.2px; 
-        }
-
-        .result-card {
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #fafafa;
-            border-radius: 6px;
-            border: 1px solid #eee;
+            color: #444;
         }
 
         img {
             max-width: 100%;
             height: auto;
-            border-radius: 8px;
+            border-radius: 4px;
             display: block;
-            margin: 0 auto;
+            margin: 20px auto 30px auto;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
         }
 
         .video-table-wrapper {
@@ -137,7 +169,6 @@
             border-right: 1px solid #eee;
         }
         
-
         .video-table thead th:first-child {
             background-color: #f8f9fa;
             border: none;
@@ -282,11 +313,52 @@
 
 <body>
     <header>
-        <h1>Learning to Reconfigure:<br>Co-designing Reconfigurable robots for Heterogeneous Locomotion</h1>
+        <h1>Learning to Reconfigure:<br>Configuration-Control Co-optimization of
+Reconfigurable Robots for Heterogeneous Locomotion</h1>
+        
+        <div class="authors">
+            <p>
+                <span class="author">Xiaoyu Xiong<sup>1 2</sup></span>
+                <span class="author">Kehan Liu<sup>2</sup></span>
+                <span class="author">HuiYi Yan<sup>3</sup></span>
+                <span class="author">Shengjie Wang<sup>2</sup></span>
+                <span class="author">Yang Gao<sup>2 1</sup></span>
+                <span class="author">Tao Du<sup>2 1</sup></span>
+            </p>
+            
+            <div class="affiliation-container">
+                <p class="affiliation"><sup>1</sup>Shanghai Qi Zhi Institute, Shanghai, China</p>
+                <p class="affiliation"><sup>2</sup>Tsinghua University, Beijing, China</p>
+                <p class="affiliation"><sup>3</sup>Xi'an Jiaotong University, Shaanxi, China</p>
+                <p class="correspondence">Correspondence to: Tao Du &lt;taodu@tsinghua.edu.cn&gt;</p>
+            </div>
+        </div>
     </header>
 
     <div class="container">
         
+        <div id="abstract" class="section">
+            <h2>Abstract</h2>
+            <p>
+                Traditional robot co-design approaches typically
+                converge to one configuration, which do not explore the flexibility from reconfiguration on heterogeneous environments. On the other hand,
+                existing designs for reconfigurable robots require human-designed configurations. We present
+                Learning to Reconfigure, a holistic pipeline for
+                configuration-control co-optimization of reconfigurable robots in heterogeneous locomotion tasks
+                consisting of several sub-tasks. Our pipeline proposes low-level specialized primitives with a high-level scheduler. To jointly optimize configuration design and control, our primitives employ
+                a multi-tail architecture that disentangles these
+                distinct objectives. Building on this, the scheduler learns to dynamically switch configurations
+                based on global task progress. We evaluate our
+                pipeline on locomotion tasks across walking, flying, and swimming, and compare with the state-of-the-art baselines, including single-robot control and multi-morphology co-optimization algorithms. Quantitative results based on traversal progress show that our pipeline outperforms
+                single-robot baselines by 5.95x average progress.
+                Compared with the reconfiguration-free design
+                given by the co-design algorithms, our robots also
+                exhibit 9.81x progress on average. These results
+                highlight the critical role of configuration adaptation in achieving versatile robotic autonomy in
+                complex worlds.
+            </p>
+        </div>
+
         <div id="results" class="section">
             <h2>Video Demonstrations</h2>
 
@@ -312,7 +384,6 @@
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/1Fly-walk-mount/ppo.mp4"></video></div></td>
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/1Fly-walk-mount/TDMPC2.mp4"></video></div></td>
                         </tr>
-
                         <tr>
                             <th>
                                 <span class="row-title">Fly-Walk</span>
@@ -323,7 +394,6 @@
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/2fly-walk-pit/ppo.mp4"></video></div></td>
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/2fly-walk-pit/TDMPC2.mp4"></video></div></td>
                         </tr>
-
                         <tr>
                             <th>
                                 <span class="row-title">Car-Leg</span>
@@ -334,7 +404,6 @@
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/3car-leg-stairs/ppo.mp4"></video></div></td>
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/3car-leg-stairs/TDMPC2.mp4"></video></div></td>
                         </tr>
-
                         <tr>
                             <th>
                                 <span class="row-title">Car-Leg</span>
@@ -345,7 +414,6 @@
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/4car-leg-narrow/ppo.mp4"></video></div></td>
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/4car-leg-narrow/TDMPC2.mp4"></video></div></td>
                         </tr>
-
                         <tr>
                             <th>
                                 <span class="row-title">Wheel-Leg</span>
@@ -355,7 +423,6 @@
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/5WheelLeg/ppo.mp4"></video></div></td>
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/5WheelLeg/TDMPC2.mp4"></video></div></td>
                         </tr>
-
                         <tr>
                             <th>
                                 <span class="row-title">Wheel-Fly</span>
@@ -366,7 +433,6 @@
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/6wheel-propeller-mount/ppo.mp4"></video></div></td>
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/6wheel-propeller-mount/TDMPC2.mp4"></video></div></td>
                         </tr>
-
                         <tr>
                             <th>
                                 <span class="row-title">Wheel-Fly</span>
@@ -380,6 +446,7 @@
                     </tbody>
                 </table>
             </div>
+            
             <div class="video-table-wrapper">
                 <table class="video-table">
                     <thead>
@@ -400,7 +467,6 @@
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/1Fly-walk-mount/bodygen.mp4"></video></div></td>
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/1Fly-walk-mount/GLSO.mp4"></video></div></td>
                         </tr>
-
                         <tr>
                             <th>
                                 <span class="row-title">Fly-Walk</span>
@@ -410,7 +476,6 @@
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/2fly-walk-pit/bodygen.mp4"></video></div></td>
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/2fly-walk-pit/GLSO.mp4"></video></div></td>
                         </tr>
-
                         <tr>
                             <th>
                                 <span class="row-title">Car-Leg</span>
@@ -420,7 +485,6 @@
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/3car-leg-stairs/bodygen.mp4"></video></div></td>
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/3car-leg-stairs/GLSO.mp4"></video></div></td>
                         </tr>
-
                         <tr>
                             <th>
                                 <span class="row-title">Car-Leg</span>
@@ -430,7 +494,6 @@
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/4car-leg-narrow/bodygen.mp4"></video></div></td>
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/4car-leg-narrow/GLSO.mp4"></video></div></td>
                         </tr>
-
                         <tr>
                             <th>
                                 <span class="row-title">Wheel-Leg</span>
@@ -439,7 +502,6 @@
                             <td><div class="no-video-container"><span class="no-video-text">FAIL</span></div></td>
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/5WheelLeg/GLSO.mp4"></video></div></td>
                         </tr>
-
                         <tr>
                             <th>
                                 <span class="row-title">Wheel-Fly</span>
@@ -449,7 +511,6 @@
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/6wheel-propeller-mount/bodygen.mp4"></video></div></td>
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/6wheel-propeller-mount/GLSO.mp4"></video></div></td>
                         </tr>
-
                         <tr>
                             <th>
                                 <span class="row-title">Wheel-Fly</span>
@@ -462,6 +523,7 @@
                     </tbody>
                 </table>
             </div>
+
             <div class="video-table-wrapper">
                 <table class="video-table">
                     <thead>
@@ -482,7 +544,6 @@
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/1Fly-walk-mount/random.mp4"></video></div></td>
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/1Fly-walk-mount/qpos.mp4"></video></div></td>
                         </tr>
-
                         <tr>
                             <th>
                                 <span class="row-title">Fly-Walk</span>
@@ -492,7 +553,6 @@
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/2fly-walk-pit/random.mp4"></video></div></td>
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/2fly-walk-pit/qpos.mp4"></video></div></td>
                         </tr>
-
                         <tr>
                             <th>
                                 <span class="row-title">Car-Leg</span>
@@ -502,7 +562,6 @@
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/3car-leg-stairs/random.mp4"></video></div></td>
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/3car-leg-stairs/qpos.mp4"></video></div></td>
                         </tr>
-
                         <tr>
                             <th>
                                 <span class="row-title">Car-Leg</span>
@@ -512,7 +571,6 @@
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/4car-leg-narrow/random.mp4"></video></div></td>
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/4car-leg-narrow/qpos.mp4"></video></div></td>
                         </tr>
-
                         <tr>
                             <th>
                                 <span class="row-title">Wheel-Leg</span>
@@ -521,7 +579,6 @@
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/5WheelLeg/random.mp4"></video></div></td>
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/5WheelLeg/qpos.mp4"></video></div></td>
                         </tr>
-
                         <tr>
                             <th>
                                 <span class="row-title">Wheel-Fly</span>
@@ -531,7 +588,6 @@
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/6wheel-propeller-mount/random.mp4"></video></div></td>
                             <td><div class="table-video-container"><video class="lazy-video" loop muted playsinline src="assets/videos/6wheel-propeller-mount/qpos.mp4"></video></div></td>
                         </tr>
-
                         <tr>
                             <th>
                                 <span class="row-title">Wheel-Fly</span>
@@ -544,26 +600,36 @@
                     </tbody>
                 </table>
             </div>
-            
         </div>
+
+        <div id="statistics" class="section">
+            <h2>Statistical Results</h2>
+            
+            <h3>1. Comparison with Single-Robot Algorithms</h3>
+            <img src="assets/images/table1.png" alt="Table 1: Comparison of normalized S with the single-robot algorithms">
+
+            <h3>2. Comparison with Multi-Morphology Algorithms</h3>
+            <img src="assets/images/table2.png" alt="Table 2: Comparison with multi-morphology algorithms">
+
+            <h3>3. Ablation Study</h3>
+            <img src="assets/images/table3.png" alt="Table 3: Ablation study">
+
+            <h3>4. Comparison against End-to-End and Heuristics</h3>
+            <img src="assets/images/figure5.png" alt="Figure 5: Comparison of normalized S between our method, end-to-end method, and heuristic method">
+        </div>
+        
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // 获取所有带有 .lazy-video 类名的视频元素
             var lazyVideos = [].slice.call(document.querySelectorAll("video.lazy-video"));
 
             if ("IntersectionObserver" in window) {
                 var lazyVideoObserver = new IntersectionObserver(function(entries, observer) {
                     entries.forEach(function(entry) {
-                        // 只要视频元素进入了扩展视口范围
                         if (entry.isIntersecting) {
                             var video = entry.target;
-                            
-                            // 确保静音以允许自动播放
                             video.muted = true;
-                            
-                            // 触发播放
                             var promise = video.play();
                             if (promise !== undefined) {
                                 promise.catch(function(error) {
@@ -571,12 +637,10 @@
                                 });
                             }
                         } else {
-                            // 离开视口时暂停，节省性能
                             entry.target.pause();
                         }
                     });
                 }, {
-                    // 向上和向下各扩展 500 像素的检测范围，防止“触顶才播”
                     rootMargin: "500px 0px 500px 0px",
                     threshold: 0 
                 });
